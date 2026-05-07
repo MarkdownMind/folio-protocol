@@ -1,0 +1,33 @@
+{
+  "_comment": "VALID — minimal conforming record. One version, no collaboration.",
+  "folio": "1.0",
+  "identity": {
+    "id": "urn:folio:a3f9c821-4e2d-4b8c-9f1a-7d6e3c2b5a08",
+    "created": "2026-05-03T10:00:00Z",
+    "created-by": "ian@firm.com"
+  },
+  "history": [
+    {
+      "v": 1,
+      "author": "ian@firm.com",
+      "timestamp": "2026-05-03T10:00:00Z",
+      "fingerprint": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ast-version": "3.2.1",
+      "note": "Initial draft",
+      "format": "docx"
+    }
+  ],
+  "events": [
+    {
+      "event": "INITIALIZED",
+      "timestamp": "2026-05-03T10:00:00Z",
+      "by": "ian@firm.com",
+      "format": "docx"
+    }
+  ],
+  "collaboration": {
+    "pen-holder": "ian@firm.com",
+    "markups": [],
+    "signoffs": []
+  }
+}

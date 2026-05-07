@@ -1,0 +1,136 @@
+{
+  "_comment": "VALID — full lifecycle record. Contract from draft to execution.",
+  "folio": "1.0",
+  "identity": {
+    "id": "urn:folio:b7d2e491-8f3a-4c1d-a9e5-2b8f4c7d0e3a",
+    "title": "Service Agreement — Acme Corp / Buyer LLC",
+    "created": "2026-05-03T10:00:00Z",
+    "created-by": "ian@firm.com"
+  },
+  "history": [
+    {
+      "v": 1,
+      "author": "ian@firm.com",
+      "timestamp": "2026-05-03T10:00:00Z",
+      "fingerprint": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ast-version": "3.2.1",
+      "note": "Initial draft",
+      "format": "docx"
+    },
+    {
+      "v": 2,
+      "author": "ian@firm.com",
+      "timestamp": "2026-05-03T14:32:00Z",
+      "fingerprint": "sha256:a87ff679a2f3e71d9181a67b7542122c4ad0ab5fe55a53d14c2b7e2e5b40d123",
+      "ast-version": "3.2.1",
+      "note": "Incorporated tax counsel markup — payment terms and governing law",
+      "format": "docx"
+    },
+    {
+      "v": 3,
+      "author": "ian@firm.com",
+      "timestamp": "2026-05-04T09:15:00Z",
+      "fingerprint": "sha256:c4ca4238a0b923820dcc509a6f75849bc81e728d9d4c2f636f067f89cc14862c",
+      "ast-version": "3.2.1",
+      "note": "Final execution version — PDF conversion",
+      "format": "pdf"
+    }
+  ],
+  "events": [
+    {
+      "event": "INITIALIZED",
+      "timestamp": "2026-05-03T10:00:00Z",
+      "by": "ian@firm.com",
+      "format": "docx"
+    },
+    {
+      "event": "SENT",
+      "timestamp": "2026-05-03T10:30:00Z",
+      "by": "ian@firm.com",
+      "to": "taxcounsel@partnerlaw.com",
+      "version": 1,
+      "channel": "email"
+    },
+    {
+      "event": "MARKUP_ADDED",
+      "timestamp": "2026-05-03T11:00:00Z",
+      "by": "taxcounsel@partnerlaw.com",
+      "markup-id": "mkp-001"
+    },
+    {
+      "event": "INCORPORATED",
+      "timestamp": "2026-05-03T14:32:00Z",
+      "by": "ian@firm.com",
+      "markup-ids": ["mkp-001"],
+      "new-version": 2
+    },
+    {
+      "event": "SIGNED_OFF",
+      "timestamp": "2026-05-03T15:00:00Z",
+      "by": "taxcounsel@partnerlaw.com",
+      "signoff-id": "so-001"
+    },
+    {
+      "event": "CONVERTED",
+      "timestamp": "2026-05-04T09:00:00Z",
+      "by": "ian@firm.com",
+      "from": "docx",
+      "to": "pdf",
+      "version": 2,
+      "fingerprint-after": "sha256:c4ca4238a0b923820dcc509a6f75849bc81e728d9d4c2f636f067f89cc14862c",
+      "ast-version": "pdf-streams-v1"
+    },
+    {
+      "event": "MILESTONE",
+      "timestamp": "2026-05-04T09:20:00Z",
+      "by": "ian@firm.com",
+      "label": "Executed",
+      "version": 3
+    }
+  ],
+  "collaboration": {
+    "pen-holder": "ian@firm.com",
+    "markups": [
+      {
+        "id": "mkp-001",
+        "from": "taxcounsel@partnerlaw.com",
+        "from-display": "Smith & Jones LLP — Tax",
+        "submitted": "2026-05-03T11:00:00Z",
+        "base-version": 1,
+        "base-fingerprint": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "status": "incorporated",
+        "incorporated-in": 2,
+        "note": "Tax review — payment terms and governing law",
+        "ops": [
+          {
+            "type": "modify",
+            "loc": "Section 4.2, paragraph 1",
+            "old": "payment due net-30 from invoice date",
+            "new": "payment due net-60 from invoice date"
+          },
+          {
+            "type": "insert",
+            "loc": "Section 7, after paragraph 3",
+            "new": "Governing law shall be the State of Delaware. Any disputes arising hereunder shall be resolved by binding arbitration in New Castle County, Delaware."
+          },
+          {
+            "type": "delete",
+            "loc": "Section 12.4",
+            "old": "Liquidated damages: in the event of breach, the non-breaching party shall be entitled to liquidated damages of $50,000."
+          }
+        ]
+      }
+    ],
+    "signoffs": [
+      {
+        "id": "so-001",
+        "by": "taxcounsel@partnerlaw.com",
+        "by-display": "Smith & Jones LLP — Tax",
+        "timestamp": "2026-05-03T15:00:00Z",
+        "version": 2,
+        "fingerprint-at-signoff": "sha256:a87ff679a2f3e71d9181a67b7542122c4ad0ab5fe55a53d14c2b7e2e5b40d123",
+        "scope": ["Section 4", "Section 7", "Section 12"]
+      }
+    ]
+  }
+}

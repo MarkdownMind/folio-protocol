@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://schemas.folioprotocol.io/v1/folio-record.schema.json",
+  "title": "FolioRecord",
+  "description": "A Folio Protocol record. Travels with or alongside any document.",
+  "type": "object",
+  "required": ["folio", "identity", "history", "collaboration"],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "folio": {
+      "type": "string",
+      "description": "Folio Protocol version",
+      "enum": ["1.0"]
+    },
+
+    "identity": {
+      "type": "object",
+      "required": ["id", "created", "created-by"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Permanent document UUID",
+          "pattern": "^urn:folio:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable document title"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "description": "UTC timestamp of first initialization"
+        },
+        "created-by": {
+          "type": "string",
+          "description": "Email or identifier of original author"
+        },
+        "lineage": {
+          "type": "array",
+          "description": "Parent document IDs if derived from others",
+          "items": {
+            "type": "string",
+            "pattern": "^urn:folio:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          }
+        }
+      }
+    },
+
+    "history": {
+      "type": "array",
+      "description": "Append-only version records. Sequential, no gaps.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["v", "author", "timestamp", "fingerprint", "ast-version"],
+        "additionalProperties": false,
+        "properties": {
+          "v": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Version number. Monotonically increasing from 1."
+          },
+          "author": {
+            "type": "string",
+            "description": "Who created this version"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC timestamp"
+          },
+          "fingerprint": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "description": "Content fingerprint. sha256: + 64 hex chars."
+          },
+          "ast-version": {
+            "type": "string",
+            "description": "Pandoc API version used for fingerprint, e.g. '3.2.1' or 'pdf-streams-v1'"
+          },
+          "note": {
+            "type": "string",
+            "description": "Human-readable description of changes"
+          },
+          "format": {
+            "type": "string",
+            "description": "File format at time of this version",
+            "enum": ["docx","odt","ods","odp","pdf","markdown",
+                     "plain","html","epub","rst","latex","unknown"]
+          }
+        }
+      }
+    },
+
+    "events": {
+      "type": "array",
+      "description": "Append-only semantic event log",
+      "items": {
+        "type": "object",
+        "required": ["event", "timestamp", "by"],
+        "properties": {
+          "event": {
+            "type": "string",
+            "enum": [
+              "INITIALIZED","VERSIONED","SENT","MARKUP_ADDED",
+              "INCORPORATED","SIGNED_OFF","CONVERTED","MILESTONE","RESTORED"
+            ]
+          },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "by": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+
+    "collaboration": {
+      "type": "object",
+      "required": ["pen-holder", "markups", "signoffs"],
+      "additionalProperties": false,
+      "properties": {
+
+        "pen-holder": {
+          "type": ["string", "null"],
+          "description": "Current document owner with incorporation authority"
+        },
+
+        "markups": {
+          "type": "array",
+          "description": "Proposed changes submitted for pen-holder review",
+          "items": {
+            "type": "object",
+            "required": ["id","from","submitted","base-version",
+                         "base-fingerprint","status"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "from": { "type": "string" },
+              "from-display": { "type": "string" },
+              "submitted": { "type": "string", "format": "date-time" },
+              "base-version": { "type": "integer", "minimum": 1 },
+              "base-fingerprint": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["pending","incorporated","declined","expired"]
+              },
+              "incorporated-in": { "type": "integer", "minimum": 1 },
+              "note": { "type": "string" },
+              "decline-reason": { "type": "string" },
+              "ops": {
+                "type": "array",
+                "description": "Redline operations (FLP-0002)",
+                "items": {
+                  "type": "object",
+                  "required": ["type"],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["modify","insert","delete","format","move"]
+                    },
+                    "loc": { "type": "string" },
+                    "old": { "type": "string" },
+                    "new": { "type": "string" },
+                    "from": { "type": "string" },
+                    "to": { "type": "string" },
+                    "description": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "signoffs": {
+          "type": "array",
+          "description": "Approval records with content-anchored fingerprints",
+          "items": {
+            "type": "object",
+            "required": ["id","by","timestamp","version","fingerprint-at-signoff"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "by": { "type": "string" },
+              "by-display": { "type": "string" },
+              "timestamp": { "type": "string", "format": "date-time" },
+              "version": { "type": "integer", "minimum": 1 },
+              "fingerprint-at-signoff": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "scope": {
+                "type": "array",
+                "description": "Document sections reviewed",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

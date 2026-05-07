@@ -1,0 +1,27 @@
+{
+  "_comment": "INVALID — version gap. v1 then v3, missing v2. Violates FLP-0001 §3.2",
+  "folio": "1.0",
+  "identity": {
+    "id": "urn:folio:a3f9c821-4e2d-4b8c-9f1a-7d6e3c2b5a08",
+    "created": "2026-05-03T10:00:00Z",
+    "created-by": "ian@firm.com"
+  },
+  "history": [
+    {
+      "v": 1,
+      "author": "ian@firm.com",
+      "timestamp": "2026-05-03T10:00:00Z",
+      "fingerprint": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ast-version": "3.2.1"
+    },
+    {
+      "v": 3,
+      "author": "ian@firm.com",
+      "timestamp": "2026-05-03T14:00:00Z",
+      "fingerprint": "sha256:a87ff679a2f3e71d9181a67b7542122c4ad0ab5fe55a53d14c2b7e2e5b40d123",
+      "ast-version": "3.2.1"
+    }
+  ],
+  "events": [],
+  "collaboration": { "pen-holder": "ian@firm.com", "markups": [], "signoffs": [] }
+}

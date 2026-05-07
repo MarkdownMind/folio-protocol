@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Go build artifacts
+folio
+folio.exe
+*.exe
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Zip artifacts (use releases)
+folio.zip
