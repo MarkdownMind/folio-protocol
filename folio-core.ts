@@ -84,6 +84,11 @@ export interface FolioEvent {
   [key: string]: unknown;
 }
 
+export interface WriteCapability {
+  canWrite: boolean;
+  reason?: string;
+}
+
 // ─── Platform detection ───────────────────────────────────────────────────────
 
 /**
@@ -92,11 +97,36 @@ export interface FolioEvent {
  * On Word Online, the add-in operates in read-only mode.
  */
 export function isWordOnline(): boolean {
-  return Office.context.platform === Office.PlatformType.OfficeOnline;
+  return (
+    typeof Office !== "undefined" &&
+    Office.context?.platform === Office.PlatformType.OfficeOnline
+  );
+}
+
+export const WORD_ONLINE_READ_ONLY_MESSAGE =
+  "Folio: Word Online detected. Version tracking requires Word Desktop. " +
+  "History is visible but cannot be updated here. (FLP-0005 §2.1)";
+
+export function getWriteCapability(): WriteCapability {
+  if (typeof Office === "undefined" || !Office.context?.document) {
+    return {
+      canWrite: false,
+      reason: "Office.js runtime unavailable. Folio add-ins run inside Word.",
+    };
+  }
+
+  if (isWordOnline()) {
+    return {
+      canWrite: false,
+      reason: WORD_ONLINE_READ_ONLY_MESSAGE,
+    };
+  }
+
+  return { canWrite: true };
 }
 
 export function canWrite(): boolean {
-  return !isWordOnline();
+  return getWriteCapability().canWrite;
 }
 
 // ─── Custom XML namespace ─────────────────────────────────────────────────────
@@ -115,8 +145,9 @@ const MAX_PART_SIZE_BYTES = 900 * 1024; // 900KB
  * @throws if the Office API call fails
  */
 export async function readRecord(): Promise<FolioRecord | null> {
+  const office = requireOfficeRuntime();
   return new Promise((resolve, reject) => {
-    Office.context.document.customXmlParts.getByNamespaceAsync(
+    office.context.document.customXmlParts.getByNamespaceAsync(
       FOLIO_NAMESPACE,
       (result) => {
         if (result.status !== Office.AsyncResultStatus.Succeeded) {
@@ -160,14 +191,15 @@ export async function readRecord(): Promise<FolioRecord | null> {
  * @returns true if written, false if on Word Online (read-only degradation)
  */
 export async function writeRecord(record: FolioRecord): Promise<boolean> {
-  if (!canWrite()) {
-    console.warn(
-      "Folio: Word Online detected. Version tracking requires Word Desktop. " +
-      "History is visible but cannot be updated here. (FLP-0005 §2.1)"
-    );
+  const capability = getWriteCapability();
+  if (!capability.canWrite) {
+    if (capability.reason) {
+      console.warn(capability.reason);
+    }
     return false;
   }
 
+  const office = requireOfficeRuntime();
   const xml = buildXmlPart(record);
 
   // Size check (FLP-0005 §2.2)
@@ -184,11 +216,11 @@ export async function writeRecord(record: FolioRecord): Promise<boolean> {
 
   // Write new part
   return new Promise((resolve, reject) => {
-    Office.context.document.customXmlParts.addAsync(
+    office.context.document.customXmlParts.addAsync(
       xml,
       (result) => {
         if (result.status === Office.AsyncResultStatus.Succeeded) {
-          resolve(true);
+          verifyRoundTripWrite(record).then(resolve).catch(reject);
         } else {
           reject(new Error(`CustomXmlParts write failed: ${result.error.message}`));
         }
@@ -323,8 +355,9 @@ export function getStaleSignoffs(record: FolioRecord): FolioSignoff[] {
  * to the local Folio server node (folio-go) via a local HTTP endpoint.
  */
 export async function computeFingerprint(): Promise<string> {
+  const office = requireOfficeRuntime();
   return new Promise((resolve, reject) => {
-    Office.context.document.getFileAsync(
+    office.context.document.getFileAsync(
       Office.FileType.Compressed,
       { sliceSize: 65536 },
       async (result) => {
@@ -362,8 +395,9 @@ export async function computeFingerprint(): Promise<string> {
 }
 
 async function computeTextFingerprint(): Promise<string> {
+  const office = requireOfficeRuntime();
   return new Promise((resolve) => {
-    Office.context.document.getSelectedDataAsync(
+    office.context.document.getSelectedDataAsync(
       Office.CoercionType.Text,
       (result) => {
         hashString(result.value || "").then(resolve);
@@ -453,9 +487,30 @@ function utcNow(): string {
   return new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 }
 
+function requireOfficeRuntime(): typeof Office {
+  if (typeof Office === "undefined" || !Office.context?.document) {
+    throw new Error("Office.js runtime unavailable. Folio add-ins run inside Word.");
+  }
+  return Office;
+}
+
+async function verifyRoundTripWrite(record: FolioRecord): Promise<boolean> {
+  const persisted = await readRecord();
+  if (!persisted) {
+    throw new Error("CustomXmlParts write verification failed: record not found after write.");
+  }
+
+  if (JSON.stringify(persisted) !== JSON.stringify(record)) {
+    throw new Error("CustomXmlParts write verification failed: persisted record differs from requested record.");
+  }
+
+  return true;
+}
+
 async function deleteExistingParts(): Promise<void> {
+  const office = requireOfficeRuntime();
   return new Promise((resolve) => {
-    Office.context.document.customXmlParts.getByNamespaceAsync(
+    office.context.document.customXmlParts.getByNamespaceAsync(
       FOLIO_NAMESPACE,
       (result) => {
         if (

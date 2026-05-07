@@ -54,19 +54,19 @@ folio version
 ### Build
 
 ```bash
-cd folio-dotnet
+cd /path/to/folio-protocol
 
 # Restore dependencies
-dotnet restore
+dotnet restore FolioProtocol.csproj
 
 # Build library
-dotnet build -c Release
+dotnet build FolioProtocol.csproj -c Release
 
 # Pack for NuGet
-dotnet pack -c Release -o ./nupkg
+dotnet pack FolioProtocol.csproj -c Release -o ./nupkg
 
 # AOT single-file .exe for CLI use
-dotnet publish -c Release -r win-x64 \
+dotnet publish FolioProtocol.csproj -c Release -r win-x64 \
   -p:PublishSingleFile=true \
   -p:PublishAot=true \
   -o ./publish/win-x64
@@ -112,7 +112,7 @@ Console.WriteLine(verified ? "✓ Content verified" : "⚠ Content changed");
 ### Build
 
 ```bash
-cd folio-js
+cd /path/to/folio-protocol
 npm install
 npm run build
 # Outputs: dist/folio-core.js

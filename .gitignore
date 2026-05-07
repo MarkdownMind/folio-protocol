@@ -13,5 +13,9 @@ folio.exe
 .vscode/
 *.swp
 
+# JS / TS
+node_modules/
+dist/
+
 # Zip artifacts (use releases)
 folio.zip

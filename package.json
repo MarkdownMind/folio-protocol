@@ -1,0 +1,25 @@
+{
+  "name": "@folioprotocol/office-js",
+  "version": "1.0.0-alpha",
+  "description": "Folio Protocol helpers for Word add-ins via Office.js",
+  "type": "module",
+  "main": "./dist/folio-core.js",
+  "types": "./dist/folio-core.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "keywords": [
+    "folio",
+    "office-js",
+    "word",
+    "docx",
+    "document-protocol"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

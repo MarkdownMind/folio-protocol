@@ -32,7 +32,7 @@ no platform required to read it.
 | .docx           | Custom XML Part     | FLP-0010 | Yes               |
 | .odt .ods .odp  | META-INF/ directory | FLP-0011 | Yes               |
 | .pdf            | XMP stream          | FLP-0012 | Yes               |
-| .epub           | META-INF/ directory | FLP-0013 | Yes               |
+| .epub           | META-INF/ directory | FLP-0011 | Yes               |
 | Any other       | Sidecar .folio file | FLP-0015 | Adjacent file     |
 
 The data model is identical across all formats.

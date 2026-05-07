@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>FolioProtocol</AssemblyName>
+    <RootNamespace>FolioProtocol</RootNamespace>
+    <PackageId>FolioProtocol</PackageId>
+    <Version>1.0.0-alpha</Version>
+    <Authors>Folio Protocol Contributors</Authors>
+    <Description>Folio Protocol .NET library for DOCX, OCF, and sidecar transports.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/MarkdownMind/folio-protocol</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MarkdownMind/folio-protocol</RepositoryUrl>
+    <PackageTags>folio;docx;openxml;odf;epub;document-protocol</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+  </ItemGroup>
+</Project>

@@ -11,6 +11,7 @@
 //                  -p:PublishAot=true
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -115,7 +116,7 @@ internal static class JsonOpts
 
 /// <summary>
 /// Main entry point for the Folio Protocol .NET library.
-/// Reads and writes Folio records embedded in DOCX files.
+/// Reads and writes Folio records embedded in DOCX and OCF-based files.
 /// Also supports sidecar files for any format.
 /// </summary>
 public sealed class FolioDocument : IDisposable
@@ -156,7 +157,7 @@ public sealed class FolioDocument : IDisposable
     /// <summary>
     /// Reads from the best available transport for the given file extension.
     /// DOCX: embedded Custom XML Part
-    /// ODF:  embedded META-INF/folio.json
+    /// ODF/EPUB: embedded META-INF/folio.json
     /// Other: sidecar .folio file
     /// </summary>
     public static FolioRecord? Read(string path)
@@ -165,7 +166,7 @@ public sealed class FolioDocument : IDisposable
         return ext switch
         {
             ".docx" => ReadDocx(path),
-            ".odt" or ".ods" or ".odp" => ReadOdf(path),
+            ".odt" or ".ods" or ".odp" or ".epub" => ReadOdf(path),
             _ => ReadSidecar(path)
         };
     }
@@ -224,7 +225,7 @@ public sealed class FolioDocument : IDisposable
             case ".docx":
                 WriteDocx(path, record);
                 break;
-            case ".odt" or ".ods" or ".odp":
+            case ".odt" or ".ods" or ".odp" or ".epub":
                 WriteOdf(path, record);
                 break;
             default:
