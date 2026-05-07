@@ -1,0 +1,24 @@
+{
+  "_comment": "INVALID: fingerprint missing sha256: prefix",
+  "folio": "1.0",
+  "identity": {
+    "id": "urn:folio:b5d8e9f2-1a3c-4d6e-8f7b-2c4d6e8f0a1b",
+    "title": "Bad Fingerprint Document",
+    "created": "2026-05-03T10:00:00Z",
+    "created-by": "test@example.com"
+  },
+  "history": [
+    {
+      "v": 1,
+      "author": "test@example.com",
+      "timestamp": "2026-05-03T10:00:00Z",
+      "fingerprint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ast-version": "3.2.1",
+      "note": "Initial draft",
+      "format": "docx"
+    }
+  ],
+  "events": [
+    { "event": "INITIALIZED", "by": "test@example.com", "timestamp": "2026-05-03T10:00:00Z" }
+  ]
+}

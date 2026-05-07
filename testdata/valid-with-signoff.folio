@@ -1,0 +1,56 @@
+{
+  "_comment": "VALID: document with markup round-trip and final signoff",
+  "folio": "1.0",
+  "identity": {
+    "id": "urn:folio:d7f0a1b4-3c5e-4f8a-8b1c-4d6f8a0b2c3e",
+    "title": "Engagement Letter — Consolidated Partners",
+    "created": "2026-05-10T09:00:00Z",
+    "created-by": "partner@lawfirm.com"
+  },
+  "history": [
+    {
+      "v": 1,
+      "author": "partner@lawfirm.com",
+      "timestamp": "2026-05-10T09:00:00Z",
+      "fingerprint": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ast-version": "3.2.1",
+      "note": "Initial draft",
+      "format": "docx"
+    },
+    {
+      "v": 2,
+      "author": "partner@lawfirm.com",
+      "timestamp": "2026-05-11T14:00:00Z",
+      "fingerprint": "sha256:a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a",
+      "ast-version": "3.2.1",
+      "note": "Incorporated counsel markup",
+      "format": "docx"
+    }
+  ],
+  "events": [
+    { "event": "INITIALIZED",  "by": "partner@lawfirm.com",  "timestamp": "2026-05-10T09:00:00Z" },
+    { "event": "SENT",         "to": "counsel@clientco.com", "timestamp": "2026-05-10T10:00:00Z" },
+    { "event": "MARKUP_ADDED", "by": "counsel@clientco.com", "timestamp": "2026-05-11T09:00:00Z", "markup-id": "mk-01" },
+    { "event": "INCORPORATED", "by": "partner@lawfirm.com",  "timestamp": "2026-05-11T14:00:00Z", "markup-id": "mk-01" },
+    { "event": "SIGNED_OFF",   "by": "counsel@clientco.com", "timestamp": "2026-05-12T11:00:00Z", "signoff-id": "so-01" }
+  ],
+  "markup": [
+    {
+      "id": "mk-01",
+      "by": "counsel@clientco.com",
+      "timestamp": "2026-05-11T09:00:00Z",
+      "status": "INCORPORATED",
+      "location": "§4.2",
+      "note": "Revised indemnity cap from $500k to $250k"
+    }
+  ],
+  "signoffs": [
+    {
+      "id": "so-01",
+      "by": "counsel@clientco.com",
+      "timestamp": "2026-05-12T11:00:00Z",
+      "v": 2,
+      "fingerprint": "sha256:a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "_comment": "VALID: document with open (not yet incorporated) markup",
+  "folio": "1.0",
+  "identity": {
+    "id": "urn:folio:e8a1b2c5-4d6f-47a8-8b1c-5e7a8b0c3d4f",
+    "title": "Software License Agreement — Beta",
+    "created": "2026-05-15T08:00:00Z",
+    "created-by": "legal@startup.io"
+  },
+  "history": [
+    {
+      "v": 1,
+      "author": "legal@startup.io",
+      "timestamp": "2026-05-15T08:00:00Z",
+      "fingerprint": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "ast-version": "3.2.1",
+      "note": "Initial draft for review",
+      "format": "docx"
+    }
+  ],
+  "events": [
+    { "event": "INITIALIZED",  "by": "legal@startup.io",     "timestamp": "2026-05-15T08:00:00Z" },
+    { "event": "SENT",         "to": "reviewer@partner.com", "timestamp": "2026-05-15T09:00:00Z" },
+    { "event": "MARKUP_ADDED", "by": "reviewer@partner.com", "timestamp": "2026-05-16T11:00:00Z", "markup-id": "mk-01" },
+    { "event": "MARKUP_ADDED", "by": "reviewer@partner.com", "timestamp": "2026-05-16T11:05:00Z", "markup-id": "mk-02" }
+  ],
+  "markup": [
+    {
+      "id": "mk-01",
+      "by": "reviewer@partner.com",
+      "timestamp": "2026-05-16T11:00:00Z",
+      "status": "OPEN",
+      "location": "§2.1",
+      "note": "Scope of license is overbroad — suggest limiting to production use"
+    },
+    {
+      "id": "mk-02",
+      "by": "reviewer@partner.com",
+      "timestamp": "2026-05-16T11:05:00Z",
+      "status": "OPEN",
+      "location": "§8.3",
+      "note": "Governing law should be Delaware, not California"
+    }
+  ]
+}

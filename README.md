@@ -42,11 +42,29 @@ The transport changes. The protocol does not.
 
 ## Quick Start
 
+### Install
+
+```bash
+# Download the folio binary for your platform from the latest release:
+# https://github.com/MarkdownMind/folio-protocol/releases/latest
+
+# macOS (Apple Silicon)
+curl -Lo folio https://github.com/MarkdownMind/folio-protocol/releases/latest/download/folio-darwin-arm64
+chmod +x folio && sudo mv folio /usr/local/bin/
+
+# Linux (x86-64)
+curl -Lo folio https://github.com/MarkdownMind/folio-protocol/releases/latest/download/folio-linux-amd64
+chmod +x folio && sudo mv folio /usr/local/bin/
+
+# Windows (x86-64) — in PowerShell
+Invoke-WebRequest -Uri https://github.com/MarkdownMind/folio-protocol/releases/latest/download/folio-windows-amd64.exe -OutFile folio.exe
+```
+
 ### Requirements
 
 ```
-pandoc    — pandoc.org (single binary, free, no installer on Windows)
-folio.exe — github.com/folioprotocol/folio-go/releases
+pandoc  — pandoc.org (single binary, free)
+folio   — see install above
 ```
 
 ### Track any document
@@ -139,50 +157,50 @@ folio milestone contract_final.pdf --label "Executed"
 ## Repository Structure
 
 ```
-folio/
-├── README.md                        ← you are here
+folio-protocol/
+├── README.md
+├── LICENSE                          ← MIT
 │
-├── spec/                            ← open protocol specifications
-│   ├── FLP-0000-protocol.md         ← the three primitives, format neutrality
-│   ├── FLP-0001-data-model.md       ← JSON schema and field definitions
-│   ├── FLP-0002-redline.md          ← diff operation vocabulary
-│   ├── FLP-0003-markup.md           ← pen-holder model, sign-offs, disputes
-│   ├── FLP-0004-integrity.md        ← Pandoc AST fingerprinting algorithm
-│   └── FLP-0005-conformance.md      ← validation rules, known constraints
+│   ── Core specs (format-agnostic) ──────────────────────────────────
+├── FLP-0000-protocol.md             ← the three primitives, format neutrality
+├── FLP-0001-data-model.md           ← JSON schema and field definitions
+├── FLP-0002-redline.md              ← diff operation vocabulary
+├── FLP-0003-markup.md               ← pen-holder model, sign-offs, disputes
+├── FLP-0004-integrity.md            ← Pandoc AST fingerprinting algorithm
+├── FLP-0005-conformance.md          ← validation rules, known constraints
 │
-├── schema/
-│   └── folio-record.schema.json     ← machine-readable JSON schema
+│   ── Transport specs ───────────────────────────────────────────────
+├── FLP-0010-docx.md                 ← DOCX Custom XML Part
+├── FLP-0011-odf.md                  ← ODF/EPUB META-INF/folio.json
+├── FLP-0012-pdf.md                  ← PDF XMP stream
+├── FLP-0015-sidecar.md              ← universal sidecar (.folio file)
 │
-├── transports/
-│   └── TRANSPORTS.md                ← FLP-0010 DOCX, FLP-0011 ODF,
-│                                       FLP-0012 PDF, FLP-0015 Sidecar
+│   ── Schema ────────────────────────────────────────────────────────
+├── folio-record.schema.json         ← machine-readable JSON schema (FLP-0001)
 │
-├── examples/
-│   ├── valid/
-│   │   ├── minimal.folio            ← smallest conforming record
-│   │   └── full-lifecycle.folio     ← draft→markup→signoff→pdf→executed
-│   └── invalid/
-│       └── version-gap.folio        ← conformance test: version gap
+│   ── Test corpus ───────────────────────────────────────────────────
+├── minimal.folio                    ← smallest conforming record
+├── full-lifecycle.folio             ← draft→markup→signoff→pdf→executed
+├── version-gap.folio                ← conformance test: version gap (invalid)
+├── testdata/
+│   ├── valid-with-signoff.folio     ← markup incorporated, signed off
+│   ├── valid-with-markup.folio      ← open markup (pending review)
+│   ├── invalid-bad-uuid.folio       ← fails: URN format
+│   ├── invalid-bad-fingerprint.folio← fails: fingerprint format
+│   └── invalid-missing-author.folio ← fails: required field
 │
-├── docs/
-│   ├── PRD.md                       ← product requirements document
-│   ├── RATIONALE.md                 ← design decisions and tradeoffs
-│   └── BUILD.md                     ← build and deployment instructions
+│   ── Go reference implementation ──────────────────────────────────
+├── go.mod
+├── cmd/folio/main.go                ← CLI entry point (all commands)
+├── internal/
+│   ├── core/core.go                 ← data model (FLP-0001)
+│   ├── fingerprint/fingerprint.go   ← Pandoc AST pipeline (FLP-0004)
+│   ├── transport/transport.go       ← DOCX, ODF, PDF, sidecar adapters
+│   └── validate/validate.go         ← conformance checker (FLP-0005)
 │
-├── folio-go/                        ← Go reference implementation
-│   ├── go.mod                       ← zero external dependencies
-│   ├── cmd/folio/main.go            ← CLI entry point
-│   └── internal/
-│       ├── core/record.go           ← data model (FLP-0001)
-│       ├── fingerprint/fingerprint.go ← Pandoc AST pipeline (FLP-0004)
-│       ├── transport/transport.go   ← DOCX, ODF, sidecar adapters
-│       └── validate/validate.go     ← conformance checker (FLP-0005)
-│
-├── folio-dotnet/                    ← C# library (NuGet / Word add-in)
-│   └── src/FolioDocument.cs         ← built on Open XML SDK
-│
-└── folio-js/                        ← TypeScript (Office.js add-in)
-    └── src/folio-core.ts            ← Custom XML Parts API
+│   ── Other reference implementations ──────────────────────────────
+├── FolioDocument.cs                 ← C# / Open XML SDK
+└── folio-core.ts                    ← TypeScript / Office.js
 ```
 
 ---
