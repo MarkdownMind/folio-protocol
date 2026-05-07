@@ -1,9 +1,5 @@
-module github.com/folioprotocol/folio-go
+module github.com/MarkdownMind/folio-protocol
 
 go 1.22
 
-require (
-	// Zero external dependencies for core protocol.
-	// Pandoc is a system binary, called via os/exec.
-	// archive/zip, crypto/sha256, encoding/json all from stdlib.
-)
+require github.com/google/uuid v1.6.0
