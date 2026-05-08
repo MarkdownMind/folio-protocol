@@ -7,6 +7,9 @@
 /folio
 folio.exe
 *.exe
+bin/
+obj/
+nupkg/
 
 # IDE
 .idea/

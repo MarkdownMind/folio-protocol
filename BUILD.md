@@ -72,6 +72,15 @@ dotnet publish FolioProtocol.csproj -c Release -r win-x64 \
   -o ./publish/win-x64
 ```
 
+### Local SDK install (no Homebrew required)
+
+```bash
+curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh
+bash /tmp/dotnet-install.sh --channel 8.0 --install-dir "$HOME/.dotnet"
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
+```
+
 ### NuGet usage
 
 ```bash
@@ -115,7 +124,7 @@ Console.WriteLine(verified ? "✓ Content verified" : "⚠ Content changed");
 cd /path/to/folio-protocol
 npm install
 npm run build
-# Outputs: dist/folio-core.js
+# Outputs: dist/folio-core.js and dist/folio-core.d.ts
 ```
 
 ### Office Add-in integration
@@ -172,17 +181,21 @@ Office.onReady(async () => {
 
 ```
 1. Register at Partner Center: partner.microsoft.com
-2. Create manifest.xml (see /folio-js/manifest.xml)
+2. Start from `manifest.xml` in the repository root
 3. Host add-in at HTTPS endpoint (your server or Azure Static Web Apps)
 4. Required live before submission:
-   - Privacy policy URL
-   - Support URL
-   - EULA URL
+    - Privacy policy URL
+    - Support URL
+    - EULA URL
 5. Submit to AppSource
 6. Review: 3-5 business days (budget 4 weeks for first submission)
 7. Approved: IT deploys org-wide via M365 Admin Center
    No user install required — appears in Word ribbon automatically
 ```
+
+The checked-in manifest uses `https://localhost:3000` as a development host.
+Replace the task pane, command, icon, privacy, support, and legal URLs before
+AppSource submission.
 
 ---
 

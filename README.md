@@ -67,6 +67,24 @@ pandoc  — pandoc.org (single binary, free)
 folio   — see install above
 ```
 
+### Library packages
+
+```bash
+# Office.js / Word add-in helper library
+npm install
+npm run build
+# → dist/folio-core.js
+# → dist/folio-core.d.ts
+
+# .NET library / NuGet package
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
+dotnet restore FolioProtocol.csproj
+dotnet build FolioProtocol.csproj -c Release
+dotnet pack FolioProtocol.csproj -c Release -o ./nupkg
+# → nupkg/FolioProtocol.1.0.0-alpha.nupkg
+```
+
 ### Track any document
 
 ```bash
